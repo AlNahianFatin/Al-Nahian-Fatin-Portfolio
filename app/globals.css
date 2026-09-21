@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+    color-scheme: dark;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #070a12;
+    color: #eef2ff;
+}
+
+::selection {
+    background: #6366f1;
+    color: white;
+}
+
+.container-page {
+    width: min(1120px, calc(100% - 2rem));
+    margin-inline: auto;
+}
+
+.glass {
+    background: rgba(15, 23, 42, .62);
+    border: 1px solid rgba(148, 163, 184, .16);
+    backdrop-filter: blur(18px);
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #a5b4fc, #67e8f9);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.section {
+    padding: 6rem 0;
+}
+
+.card-hover {
+    transition: transform .25s ease, border-color .25s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    border-color: rgba(129, 140, 248, .5);
+}
