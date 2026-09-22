@@ -125,11 +125,6 @@ async function main() {
     update: { value: "Explore my work" },
     create: { key: "heroCta", value: "Explore my work" }
   });
-  await prisma.portfolioSetting.upsert({
-    where: { key: "footerText" },
-    update: { value: "Designed and built with Next.js, Prisma and PostgreSQL." },
-    create: { key: "footerText", value: "Designed and built with Next.js, Prisma and PostgreSQL." }
-  });
 
   console.log("Portfolio seed complete.");
 }

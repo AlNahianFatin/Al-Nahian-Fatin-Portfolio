@@ -58,8 +58,8 @@ export default async function Home() {
             </a>
 
             {
-              data.resume &&
-              <a href={data.resume.fileUrl} target="_blank"
+              data.resume && data.resume.fileUrl &&
+              <a href={data?.resume?.fileUrl} target="_blank"
                 className="rounded-xl border border-white/15 px-5 py-3 font-semibold hover:bg-white/5">
                 <Download className="mr-2 inline h-4 w-4" />View CV
               </a>
@@ -231,19 +231,13 @@ export default async function Home() {
       <footer className="border-t border-white/10 py-8 text-center text-sm text-slate-500">
         <div className="container-page flex flex-row items-center justify-center gap-3">
           <p>
-            {data.settings.footerText ||
-              `© ${thisYear} ${p?.name || "Your Name"}`}
+            {`© ${thisYear} ${p?.name || "Your Name"}`}
           </p>
 
           {
             process.env.PORTFOLIO_GITHUB_LINK && (
-              <a
-                href={process.env.PORTFOLIO_GITHUB_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="text-slate-400 transition hover:text-white"
-              >
+              <a href={process.env.PORTFOLIO_GITHUB_LINK} target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+                className="text-slate-400 transition hover:text-white">
                 <FaGithub className="h-5 w-5" />
               </a>
             )

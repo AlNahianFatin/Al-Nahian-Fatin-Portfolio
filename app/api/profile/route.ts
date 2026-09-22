@@ -1,8 +1,5 @@
-// app/api/profile/route.ts
-
 import { NextResponse } from "next/server";
 import { getPortfolio } from "../../../services/getPortfolio";
-// import { getPortfolio } from "../../../lib/portfolio";
 
 export async function GET() {
   try {
