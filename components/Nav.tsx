@@ -14,37 +14,37 @@ const links = [
   ["Contact", "#contact", "contact"],
 ];
 
-export function Nav() {
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState<any>(null);
+type NavData = {
+  profile: {
+    name: string;
+  } | null;
 
-  useEffect(() => {
-    fetch("/api/profile", {
-      cache: "no-store"
-    })
-      .then(r => r.json())
-      .then(setData)
-      .catch(() => { });
-  }, []);
+  education: boolean;
+  skills: boolean;
+  projects: boolean;
+  experience: boolean;
+  publications: boolean;
+};
+
+export function Nav({ data }: { data: NavData }) {
+  const [open, setOpen] = useState(false);
 
   const initials = (data?.profile?.name || "").split(" ").map((x: string) => x[0]).slice(0, 10).join("").toUpperCase();
 
   const shouldShowLink = (key: string) => {
-    if (!data)
-      return false;
-
-    if (key === "home")
+    if (key === "home") {
       return true;
-    
-    if (key === "contact")
+    }
+
+    if (key === "contact") {
       return true;
+    }
 
-    const value = data[key];
+    if (key === "profile") {
+      return !!data.profile;
+    }
 
-    if (key === "profile")
-      return !!value;
-
-    return Array.isArray(value) && value.length > 0;
+    return !!data[key as keyof NavData];
   };
 
   return (

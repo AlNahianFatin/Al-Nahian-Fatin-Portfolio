@@ -2,8 +2,10 @@ export async function revalidateDashboard() {
   const baseUrl = process.env.DASHBOARD_URL;
   const secret = process.env.REVALIDATE_SECRET;
   
-  if (!baseUrl || !secret) 
-    return;
+  if (!baseUrl || !secret){
+    console.error("Dashboard URL or revalidate secret is missing in env");
+    return false;
+  }
 
   try {
     await fetch(`${baseUrl.replace(/\/$/, "")}/api/revalidate`, {

@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     const saved = await prisma.message.create({ data: parsed.data });
 
-    void revalidateDashboard();
+    await revalidateDashboard();
 
     try {
       await sendNewMessageMail(saved.gmail, saved.message);
