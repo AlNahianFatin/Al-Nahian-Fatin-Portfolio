@@ -1,7 +1,9 @@
 export async function revalidateDashboard() {
   const baseUrl = process.env.DASHBOARD_URL;
   const secret = process.env.REVALIDATE_SECRET;
-  if (!baseUrl || !secret) return;
+  
+  if (!baseUrl || !secret) 
+    return;
 
   try {
     await fetch(`${baseUrl.replace(/\/$/, "")}/api/revalidate`, {
