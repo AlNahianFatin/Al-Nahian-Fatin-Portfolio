@@ -29,6 +29,7 @@ model Profile {
   availability     String?
   email            String?
   phone            String?
+  createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
 
@@ -48,11 +49,13 @@ model Education {
   id            String    @id @default(uuid())
   institution   String
   degree        String
-  field         String?
-  startDate     DateTime?
-  endDate       DateTime?
+  field         String
+  major         String?
   description   String?
   location      String?
+  startDate     DateTime?
+  endDate       DateTime?
+  gpa           Decimal?
   imageUrl      String?
   imagePublicId String?
   sortOrder     Int       @default(0)
@@ -61,16 +64,24 @@ model Education {
   updatedAt     DateTime  @updatedAt
 }
 
+enum TechnicalSkillCategory {
+  LANGUAGE
+  WEB
+  SOFTWARE
+  DATABASE
+  TOOL
+}
+
 model Skill {
-  id        String   @id @default(uuid())
+  id        String                 @id @default(uuid())
   name      String
-  category  String?
+  category  TechnicalSkillCategory
   level     Int?
   icon      String?
-  sortOrder Int      @default(0)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sortOrder Int                    @default(0)
+  isActive  Boolean                @default(true)
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
 }
 
 model Project {
@@ -89,34 +100,54 @@ model Project {
   updatedAt     DateTime @updatedAt
 }
 
+enum PublicationStatus {
+  ONGOING
+  COMPLETED
+}
+
 model Publication {
-  id              String    @id @default(uuid())
+  id              String            @id @default(uuid())
   title           String
+  status          PublicationStatus
   description     String?
   publisher       String?
   publicationDate DateTime?
   url             String?
   imageUrl        String?
   imagePublicId   String?
-  sortOrder       Int       @default(0)
-  isActive        Boolean   @default(true)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  sortOrder       Int               @default(0)
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 model Resume {
   id           String   @id @default(uuid())
-  title        String?
-  fileUrl      String?
-  filePublicId String?
+  title        String
+  fileUrl      String
+  filePublicId String
   isActive     Boolean  @default(true)
-  uploadedAt   DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Experience {
+  id        String    @id @default(uuid())
+  company   String
+  role      String
+  task      String?
+  startDate DateTime
+  endDate   DateTime?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model PortfolioSetting {
   id        String   @id @default(uuid())
   key       String   @unique
   value     String
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
@@ -127,7 +158,6 @@ model Message {
   isRead    Boolean   @default(false)
   readAt    DateTime?
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 
   @@index([gmail])
   @@index([isRead])

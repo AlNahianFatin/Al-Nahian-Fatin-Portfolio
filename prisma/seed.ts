@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TechnicalSkillCategory } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -8,14 +8,14 @@ async function main() {
     update: {},
     create: {
       id: "profile-main",
-      name: process.env.USER_NAME || "User name",
+      name: process.env.NEXT_PUBLIC_USER_NAME || "User name",
       title: "Full-Stack Developer",
       shortBio: "I build modern, reliable and user-friendly web applications.",
       aboutTitle: "Building useful software with clean engineering",
       aboutDescription: "I am a Computer Science student and developer focused on modern web development, backend engineering and database-driven applications.",
       location: "Bangladesh",
       availability: "Open to interesting projects",
-      email: process.env.USER_EMAIL || "admin@example.com"
+      email: process.env.NEXT_PUBLIC_USER_EMAIL || "admin@example.com"
     }
   });
 
@@ -23,14 +23,14 @@ async function main() {
     ["GitHub", "GitHub", process.env.GITHUB_LINK || "https://www.github.com", "github"],
     ["LinkedIn", "LinkedIn", process.env.LINKEDIN_LINK || "https://www.linkedin.com", "linkedin"],
     ["Facebook", "Facebook", process.env.FACEBOOK_LINK || "https://www.facebook.com", "facebook"],
-    ["Gmail", "Gmail", `mailto:${process.env.USER_EMAIL || "admin@example.com"}`, "mail"],
+    ["Gmail", "Gmail", `mailto:${process.env.NEXT_PUBLIC_USER_EMAIL || "admin@example.com"}`, "mail"],
   ];
   for (let i = 0; i < socials.length; i++) {
     const [platform, label, url, icon] = socials[i];
     await prisma.socialLink.upsert({
       where: { id: `social-${i + 1}` },
       update: { platform, label, url, icon },
-      create: { id: `social-${i + 1}`, platform, label, url, icon, sortOrder: i }
+      create: { id: `social-${i + 1}`, platform, label, url, icon, sortOrder: i + 1 }
     });
   }
 
@@ -45,22 +45,22 @@ async function main() {
       startDate: new Date(process.env.USER_EDUCATION_INSTITUTION_START_DATE || "2000-01-01"),
       description: "Studying computer science, software engineering, databases and web development.",
       location: "Dhaka, Bangladesh",
-      sortOrder: 0
+      sortOrder: 1
     }
   });
 
-  const skills: [string, string, number][] = [
-    ["C#", "Programming", 85],
-    ["JavaScript", "Programming", 90],
-    ["TypeScript", "Programming", 85],
-    ["React", "Frontend", 90],
-    ["Next.js", "Frontend", 85],
-    ["Node.js", "Backend", 88],
-    ["Express.js", "Backend", 88],
-    ["NestJS", "Backend", 80],
-    ["Prisma", "Database", 85],
-    ["PostgreSQL", "Database", 88],
-    ["MySQL", "Database", 82],
+  const skills: [string, TechnicalSkillCategory, number][] = [
+    ["C#", TechnicalSkillCategory.LANGUAGE, 85],
+    ["JavaScript", TechnicalSkillCategory.LANGUAGE, 90],
+    ["TypeScript", TechnicalSkillCategory.LANGUAGE, 85],
+    ["React", TechnicalSkillCategory.WEB, 90],
+    ["Next.js", TechnicalSkillCategory.WEB, 85],
+    ["Node.js", TechnicalSkillCategory.WEB, 88],
+    ["Express.js", TechnicalSkillCategory.WEB, 88],
+    ["NestJS", TechnicalSkillCategory.WEB, 80],
+    ["Prisma", TechnicalSkillCategory.DATABASE, 85],
+    ["PostgreSQL", TechnicalSkillCategory.DATABASE, 88],
+    ["MySQL", TechnicalSkillCategory.DATABASE, 82],
   ];
 
   for (let i = 0; i < skills.length; i++) {
@@ -80,7 +80,7 @@ async function main() {
         name,
         category,
         level,
-        sortOrder: i,
+        sortOrder: i + 1,
       },
     });
   }
@@ -96,7 +96,7 @@ async function main() {
       liveUrl: process.env.USER_PROJECT1_LIVE_URL || "Live link 1",
       technologies: ["Next.js", "Express.js", "PrismaORM", "PostgreSQL"],
       featured: true,
-      sortOrder: 0
+      sortOrder: 1
     }
   });
 
@@ -111,19 +111,59 @@ async function main() {
       liveUrl: process.env.USER_PROJECT2_LIVE_URL || "Live link 2",
       technologies: ["React", "Vite", "Tailwind CSS", "TVMaze"],
       featured: true,
-      sortOrder: 1
+      sortOrder: 2
     }
   });
 
   await prisma.portfolioSetting.upsert({
-    where: { key: "heroBadge" },
-    update: { value: "Available for selected opportunities" },
-    create: { key: "heroBadge", value: "Available for selected opportunities" }
+    where: { key: "heroViewProjectsText" },
+    update: { value: "Explore my works" },
+    create: { key: "heroViewProjectsText", value: "Explore my works" }
   });
   await prisma.portfolioSetting.upsert({
-    where: { key: "heroCta" },
-    update: { value: "Explore my work" },
-    create: { key: "heroCta", value: "Explore my work" }
+    where: { key: "educationHeadingText" },
+    update: { value: "Academic timeline" },
+    create: { key: "educationHeadingText", value: "Academic timeline" }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "educationDescriptionText" },
+    update: { value: "From one academic milestone to the next." },
+    create: { key: "educationDescriptionText", value: "From one academic milestone to the next." }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "skillHeadingText" },
+    update: { value: "My toolkits" },
+    create: { key: "skillHeadingText", value: "My toolkits" }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "projectHeadingText" },
+    update: { value: "Things I've built" },
+    create: { key: "projectHeadingText", value: "Things I've built" }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "projectDescriptionText" },
+    update: { value: "A visual archive of my selected works." },
+    create: { key: "projectDescriptionText", value: "A visual archive of my selected works." }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "experienceHeadingText" },
+    update: { value: "Where I've contributed" },
+    create: { key: "experienceHeadingText", value: "Where I've contributed" }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "publicationHeadingText" },
+    update: { value: "Research & publications" },
+    create: { key: "publicationHeadingText", value: "Research & publications" }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "contactHeadingText" },
+    update: { value: "Let's build something." },
+    create: { key: "contactHeadingText", value: "Let's build something." }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "contactDescriptionText" },
+    update: { value: "Have a project, opportunity, or question? Send a message and I'll get back to you." },
+    create: { key: "contactDescriptionText", value: "Have a project, opportunity, or question? Send a message and I'll get back to you." }
   });
 
   console.log("Portfolio seed complete.");

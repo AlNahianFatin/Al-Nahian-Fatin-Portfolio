@@ -1,4 +1,4 @@
-# Fatin Portfolio
+# Al nahian Fatin Portfolio
 
 A modern, database-driven Next.js portfolio. Portfolio content is managed from the separate dashboard project.
 

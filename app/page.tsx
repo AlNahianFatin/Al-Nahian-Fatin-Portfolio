@@ -1,246 +1,337 @@
 import { ContactForm } from "../components/ContactForm";
-import {
-  ArrowUpRight,
-  Download,
-  Mail,
-  MapPin,
-  Phone
-} from "lucide-react";
-
-import {
-  FaGithub,
-  FaFacebook,
-  FaLinkedin,
-  FaTwitter,
-  FaInstagram,
-  FaYoutube,
-  FaGlobe,
-} from "react-icons/fa";
-
+import { ArrowDown, ArrowUpRight, Download, Mail, MapPin, Phone } from "lucide-react";
+import { FaGithub, FaFacebook, FaLinkedin, FaTwitter, FaInstagram, FaYoutube, FaGlobe } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-
 import { getPortfolio } from "../services/getPortfolio";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const socialIcons: Record<string, React.ElementType> = {
-  mail: Mail,
-  email: Mail,
-  gmail: Mail,
-  github: FaGithub,
-  facebook: FaFacebook,
-  linkedin: FaLinkedin,
-  twitter: FaTwitter,
-  x: FaXTwitter,
-  instagram: FaInstagram,
-  youtube: FaYoutube,
-  website: FaGlobe,
+  mail: Mail, email: Mail, gmail: Mail, github: FaGithub, facebook: FaFacebook,
+  linkedin: FaLinkedin, twitter: FaTwitter, x: FaXTwitter, instagram: FaInstagram,
+  youtube: FaYoutube, website: FaGlobe,
 };
+
+const categoryLabel: Record<string, string> = {
+  LANGUAGE: "Programming Languages",
+  WEB: "Web Technologies",
+  SOFTWARE: "Software Frameworks",
+  DATABASE: "Database Systems",
+  TOOL: "Tools & Platforms",
+};
+
+function yearRange(start: Date | null | undefined, end: Date | null | undefined) {
+  const from = start ? new Date(start).getFullYear() : "";
+
+  const to = end ? new Date(end).getFullYear() : "Present";
+
+  return `${from} — ${to}`;
+}
 
 export default async function Home() {
   const data = await getPortfolio();
+
   const p = data.profile;
 
-  const thisYear = new Date().getFullYear();
+  const skillsByCategory = data.skills.reduce((acc: Record<string, typeof data.skills>, s) => {
+    (acc[s.category] ||= []).push(s);
+    return acc;
+  }, {});
+
+  const projects = [...data.projects].sort((a, b) => (a.sortOrder - b.sortOrder) || Number(b.featured) - Number(a.featured));
+
+  const skillCategories = Object.entries(skillsByCategory) as [string, typeof data.skills][];
 
   return (
     <main>
-      <section id="home" className="container-page flex min-h-screen items-center pt-16">
-        <div className="max-w-4xl">
-          <p className="mb-5 text-sm font-semibold uppercase tracking-[.25em] text-indigo-300">{data.settings.heroBadge || "Welcome to my portfolio"}</p>
-          <h1 className="text-5xl font-black tracking-tight sm:text-7xl">Hi, I&apos;m <span className="gradient-text">{p?.name || "Your Name"}</span></h1>
-          <p className="mt-5 text-2xl font-semibold text-slate-300">{p?.title || "Developer"}</p>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-400">{p?.shortBio}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#projects" className="rounded-xl bg-indigo-500 px-5 py-3 font-semibold transition hover:bg-indigo-400">
-              {data.settings.heroCta || "Explore my work"}
-              <ArrowUpRight className="ml-1 inline h-4 w-4" />
-            </a>
-
-            {
-              data.resume && data.resume.fileUrl &&
-              <a href={data?.resume?.fileUrl} target="_blank"
-                className="rounded-xl border border-white/15 px-5 py-3 font-semibold hover:bg-white/5">
-                <Download className="mr-2 inline h-4 w-4" />View CV
-              </a>
-            }
-          </div>
-        </div>
-      </section>
-
-      <section id="about" className="section border-t border-white/5">
-        <div className="container-page grid gap-10 md:grid-cols-[.7fr_1.3fr]">
+      <section id="home" className="container-page flex min-h-screen items-center py-28">
+        <div className="grid w-full items-center gap-12 lg:grid-cols-[1.35fr_.65fr]">
           <div>
-            <p className="text-sm uppercase tracking-widest text-indigo-300">01 / Introduction</p>
-            <h2 className="mt-3 text-4xl font-bold">{p?.aboutTitle}</h2>
-          </div>
-          <p className="text-lg leading-8 text-slate-400">{p?.aboutDescription}</p>
-        </div>
-      </section>
-
-      <section id="education" className="section">
-        <div className="container-page">
-          <p className="text-sm uppercase tracking-widest text-indigo-300">02 / Education</p>
-          <h2 className="mt-3 text-4xl font-bold">Education</h2>
-          <div className="mt-8 grid gap-4">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-300/15 bg-cyan-300/5 px-3 py-1 text-xs text-cyan-200">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_12px_#67e8f9]" />
+              {p?.availability || "Available for opportunities"}
+            </div>
+            <p className="dir-label">personal / portfolio</p>
+            <h1 className="display max-w-4xl text-5xl font-medium leading-[.98] sm:text-7xl lg:text-8xl">
+              {p?.name || "Your Name"}
+              <span className="blink-cursor" />
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
+              {p?.title || "Full-Stack Developer"}
+            </p>
             {
-              data.education.map(e =>
-                <article key={e.id} className="glass rounded-2xl p-6">
-                  <div className="flex flex-wrap justify-between gap-3">
-                    <div>
-                      <h3 className="text-xl font-bold">{e.degree} {e.field && `in ${e.field}`}</h3>
-                      <p className="mt-1 text-indigo-300">{e.institution}</p>
-                    </div>
-                    <p className="text-sm text-slate-500">
-                      {e.startDate?.getFullYear()} — {e.endDate?.getFullYear() || "Present"}
-                    </p>
-                  </div>
-                  <p className="mt-4 text-slate-400">{e.description}</p>
-                </article>)
+              p?.shortBio && <p className="mt-5 max-w-2xl text-sm leading-8 text-slate-400 sm:text-base">{p.shortBio}</p>
+            }
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#projects" className="btn-primary inline-flex items-center gap-2">{data.settings.heroViewProjectsText ?? ""}
+                <ArrowDown size={16} />
+              </a>
+              {
+                data.resume?.map((r) => (
+                  <a key={r.id} href={r.fileUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost inline-flex items-center gap-2" >
+                    <Download size={16} />
+                    {r.title || "Resume"}
+                  </a>
+                ))
+              }
+            </div>
+            <div className="mt-12 flex flex-wrap gap-3 text-xs text-slate-500">
+              <span className="rounded-full border border-white/8 px-3 py-1.5">{data.skills.length} skill{data.skills.length > 1 ? "s" : ""}</span>
+              <span className="rounded-full border border-white/8 px-3 py-1.5">{projects.length} project{projects.length > 1 ? "s" : ""}</span>
+              <span className="rounded-full border border-white/8 px-3 py-1.5">{data.experience.length} experience{data.experience.length > 1 ? "s" : ""}</span>
+              <span className="rounded-full border border-white/8 px-3 py-1.5">{data.publications.length} publication{data.publications.length > 1 ? "s" : ""}</span>
+            </div>
+          </div>
+          <div className="glass relative mx-auto w-full max-w-sm rounded-4xl p-3">
+            <div className="absolute -inset-5 -z-10 rounded-full bg-violet-500/10 blur-3xl" />
+            {
+              p?.imageUrl ?
+                <img src={p.imageUrl} alt={p.name} className="aspect-4/5 w-full rounded-3xl object-cover" /> :
+                <div className="grid aspect-4/5 place-items-center rounded-3xl bg-linear-to-br from-violet-500/20 via-slate-900 to-cyan-400/10 text-7xl font-black text-white/10">
+                  {p?.name || "Your Name"}
+                </div>
             }
           </div>
         </div>
       </section>
 
-      <section id="skills" className="section border-y border-white/5">
-        <div className="container-page">
-          <p className="text-sm uppercase tracking-widest text-indigo-300">03 / Skills</p>
-          <h2 className="mt-3 text-4xl font-bold">Tools I work with</h2>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {
-              data.skills.map(s =>
-                <div key={s.id} className="glass rounded-xl px-4 py-3">
-                  <span className="font-medium">{s.name}</span>
-                  {
-                    s.category &&
-                    <span className="ml-2 text-xs text-slate-500">{s.category}</span>
-                  }
-                </div>)}
+      <section id="about" className="section">
+        <div className="container-page grid gap-8 lg:grid-cols-[.35fr_1fr]">
+          <div>
+            <p className="dir-label">about</p>
+            <h2 className="display text-4xl sm:text-5xl">{p?.aboutTitle || "A little about me"}</h2>
+          </div>
+          <div className="glass rounded-3xl p-6 sm:p-8">
+            <p className="max-w-3xl text-sm leading-8 text-slate-300 sm:text-base">{p?.aboutDescription || p?.shortBio}</p>
           </div>
         </div>
       </section>
 
-      <section id="projects" className="section">
-        <div className="container-page">
-          <p className="text-sm uppercase tracking-widest text-indigo-300">04 / Projects</p>
-          <h2 className="mt-3 text-4xl font-bold">Selected work</h2>
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            {
-              data.projects.map(x =>
-                <article key={x.id} className="glass card-hover rounded-2xl p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="text-2xl font-bold">{x.title}</h3>
-                    {
-                      x.featured &&
-                      <span className="rounded-full bg-indigo-500/15 px-3 py-1 text-xs text-indigo-300">Featured</span>
-                    }
+      {
+        data.education.length > 0 &&
+        <section id="education" className="section">
+          <div className="container-page">
+            <p className="dir-label">education</p>
+            <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+              <h2 className="display text-4xl sm:text-5xl">{data.settings.educationHeadingText ?? ""}</h2>
+              <p className="max-w-sm text-xs leading-6 text-slate-500">{data.settings.educationDescriptionText ?? ""}</p>
+            </div>
+            <div className="timeline space-y-8">
+              {
+                data.education.map(e =>
+                  <article key={e.id} className="timeline-item">
+                    <span className="timeline-dot" />
+                    <div className="glass glass-hover rounded-3xl p-5 sm:p-7">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex gap-4">
+                          {
+                            e.imageUrl &&
+                            <img src={e.imageUrl} alt="" className="hidden h-fit w-60 rounded-2xl object-cover sm:block" />
+                          }
+                          <div>
+                            <p className="timeline-period">{yearRange(e.startDate, e.endDate)}</p>
+                            <h3 className="mt-1 text-xl font-semibold">{e.degree}{e.field ? ` in ${e.field}` : ""}{e.major ? ` (Major in ${e.major})` : ""}</h3>
+                            <p className="mt-1 text-sm text-violet-200">{e.institution}</p>
+                          </div>
+                        </div>
+                        {
+                          e.gpa &&
+                          <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-300">GPA {String(e.gpa)}</span>
+                        }
+                      </div>
+                      {
+                        e.description &&
+                        <p className="mt-5 text-sm leading-7 text-slate-400">{e.description}</p>
+                      }
+                    </div>
+                  </article>)}
+            </div>
+          </div>
+        </section>
+      }
+
+      {
+        skillCategories.length > 0 &&
+        <section id="skills" className="section">
+          <div className="container-page">
+            <p className="dir-label">skills</p>
+            <h2 className="display mb-10 text-4xl sm:text-5xl">{data.settings.skillHeadingText ?? ""}</h2>
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {
+                skillCategories.map(([category, items]) =>
+                  <div key={category} className="glass glass-hover rounded-3xl p-6">
+                    <p className="text-xs uppercase tracking-[.15em] text-cyan-300">{categoryLabel[category] || category}</p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {
+                        items.map(s => <span key={s.id} className="tag">{s.name}{s.level ? ` · ${s.level}%` : ""}</span>)
+                      }
+                    </div>
                   </div>
-                  <p className="mt-4 min-h-20 text-slate-400">{x.description}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
+                )
+              }
+            </div>
+          </div>
+        </section>
+      }
+
+      {
+        projects.length > 0 &&
+        <section id="projects" className="section">
+          <div className="container-page">
+            <p className="dir-label">selected projects</p>
+            <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+              <h2 className="display text-4xl sm:text-5xl">{data.settings.projectHeadingText ?? ""}</h2>
+              <span className="text-xs text-slate-500">{data.settings.projectDescriptionText ?? ""}</span>
+            </div>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {
+                projects.map(x =>
+                  <article key={x.id} className="glass glass-hover overflow-hidden rounded-3xl p-3">
                     {
-                      x.technologies.map(t =>
-                        <span key={t} className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-300">{t}</span>)
+                      x.imageUrl ?
+                        <img src={x.imageUrl} alt={x.title} className="project-image" /> :
+                        <div className="project-placeholder">
+                          <span className="text-4xl font-black text-white/10">
+                            {x.title}
+                          </span>
+                        </div>
                     }
+                    <div className="p-4 sm:p-5">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-xl font-semibold">{x.title}</h3>
+                        {
+                          x.featured &&
+                          <span className="rounded-full bg-violet-500/10 px-2.5 py-1 text-[10px] uppercase tracking-wider text-violet-200">Featured</span>
+                        }
+                      </div>
+                      {
+                        x.description &&
+                        <p className="mt-3 text-sm leading-7 text-slate-400">{x.description}</p>
+                      }
+                      {
+                        x.technologies?.length > 0 &&
+                        <div className="mt-4 flex flex-wrap gap-2">{x.technologies.map(t =>
+                          <span key={t} className="tag">{t}</span>)
+                        }
+                        </div>
+                      }
+                      <div className="mt-6 flex gap-2">
+                        {
+                          x.githubUrl &&
+                          <a href={x.githubUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost inline-flex items-center gap-2 px-4! py-2! text-xs">
+                            <FaGithub /> Source
+                          </a>}
+                        {
+                          x.liveUrl &&
+                          <a href={x.liveUrl} target="_blank" rel="noopener noreferrer" className="btn-primary inline-flex items-center gap-2 px-4! py-2! text-xs">Live demo
+                            <ArrowUpRight size={14} />
+                          </a>
+                        }
+                      </div>
+                    </div>
+                  </article>
+                )
+              }
+            </div>
+          </div>
+        </section>
+      }
+
+      {
+        data.experience.length > 0 &&
+        <section id="experience" className="section">
+          <div className="container-page">
+            <p className="dir-label">experience</p>
+            <h2 className="display mb-10 text-4xl sm:text-5xl">{data.settings.experienceHeadingText ?? ""}</h2>
+            <div className="timeline space-y-8">
+              {data.experience.map(x => <article key={x.id} className="timeline-item">
+                <span className="timeline-dot" />
+                <div className="glass glass-hover rounded-3xl p-5 sm:p-7">
+                  <p className="timeline-period">{yearRange(x.startDate, x.endDate)}</p>
+                  <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 className="text-xl font-semibold">{x.role}</h3>
+                    <span className="text-sm text-violet-200">{x.company}</span>
                   </div>
-                  <div className="mt-6 flex gap-3">
+                  {x.task && <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-400">{x.task}</p>}
+                </div>
+              </article>)}
+            </div>
+          </div>
+        </section>
+      }
+
+      {
+        data.publications.length > 0 &&
+        <section id="publications" className="section">
+          <div className="container-page">
+            <p className="dir-label">writing</p>
+            <h2 className="display mb-10 text-4xl sm:text-5xl">{data.settings.publicationHeadingText ?? ""}</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {
+                data.publications.map(x =>
+                  <article key={x.id} className="glass glass-hover rounded-3xl p-6">
                     {
-                      x.githubUrl &&
-                      <a className="rounded-lg border border-white/10 px-4 py-2 text-sm hover:bg-white/5" href={x.githubUrl}
-                        target="_blank">
-                        <FaGithub className="mr-2 inline h-4 w-4" />GitHub
+                      x.imageUrl ?
+                        <img src={x.imageUrl} alt={x.title} className="publication-image mb-6 rounded-xl" /> :
+                        <div className="publication-placeholder">
+                          <span className="text-4xl font-black text-white/10">
+                            {x.title}
+                          </span>
+                        </div>
+                    }
+                    <div className="flex justify-between gap-3">
+                      <h3 className="text-lg font-semibold">{x.title}</h3>
+                      <span className="text-xs text-cyan-200">{x.status === "ONGOING" ? "Ongoing" : "Completed"}</span>
+                    </div>
+                    {
+                      x.publisher &&
+                      <p className="mt-2 text-xs text-violet-200">{x.publisher}</p>
+                    }
+                    {
+                      x.description &&
+                      <p className="mt-4 text-sm leading-7 text-slate-400">{x.description}</p>
+                    }
+                    {
+                      x.url &&
+                      <a href={x.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-1 text-xs text-cyan-200">Read publication
+                        <ArrowUpRight size={14} />
                       </a>
                     }
-                    {
-                      x.liveUrl &&
-                      <a className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold hover:bg-indigo-400" href={x.liveUrl}
-                        target="_blank">Live Demo
-                        <ArrowUpRight className="ml-1 inline h-4 w-4" /></a>
-                    }
-                  </div>
-                </article>
-              )
-            }
+                  </article>
+                )
+              }
+            </div>
           </div>
-        </div>
-      </section>
-
-      <section id="publications" className="section border-y border-white/5">
-        <div className="container-page">
-          <p className="text-sm uppercase tracking-widest text-indigo-300">05 / Publications</p>
-          <h2 className="mt-3 text-4xl font-bold">Publications</h2>
-          <div className="mt-8 grid gap-4">
-            {
-              data.publications.length ? data.publications.map(x =>
-                <article key={x.id} className="glass rounded-2xl p-6">
-                  <h3 className="text-xl font-bold">{x.title}</h3>
-                  <p className="mt-2 text-slate-400">{x.description}</p>
-                  {
-                    x.url &&
-                    <a className="mt-4 inline-block text-indigo-300" href={x.url} target="_blank">Read publication →</a>
-                  }</article>) :
-                <p className="text-slate-500">Publications will appear here.</p>
-            }
-          </div>
-        </div>
-      </section>
+        </section>
+      }
 
       <section id="contact" className="section">
-        <div className="container-page grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+        <div className="container-page grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
           <div>
-            <p className="text-sm uppercase tracking-widest text-indigo-300">06 / Contact</p>
-            <h2 className="mt-3 text-4xl font-bold">Let&apos;s talk.</h2>
-            <p className="mt-4 text-slate-400">Have a project, opportunity or question? Send me a message.</p>
-            <div className="mt-7 space-y-3 text-slate-300">
-              {
-                p?.email &&
-                <p><Mail className="mr-3 inline h-5 w-5 text-indigo-300" />{p.email}</p>
-              }
-              {
-                p?.phone &&
-                <p><Phone className="mr-3 inline h-5 w-5 text-indigo-300" />{p.phone}</p>
-              }
-              {
-                p?.location &&
-                <p><MapPin className="mr-3 inline h-5 w-5 text-indigo-300" />{p.location}</p>
-              }
+            <p className="dir-label">contact</p>
+            <h2 className="display text-4xl sm:text-5xl">{data.settings.contactHeadingText ?? ""}</h2>
+            <p className="mt-5 max-w-md text-sm leading-7 text-slate-400">{data.settings.contactDescriptionText ?? ""}</p>
+            <div className="mt-8 space-y-3 text-sm text-slate-300">
+              {p?.email && <p className="flex items-center gap-3"><Mail size={16} className="text-cyan-300" />{p.email}</p>}
+              {p?.phone && <p className="flex items-center gap-3"><Phone size={16} className="text-cyan-300" />{p.phone}</p>}
+              {p?.location && <p className="flex items-center gap-3"><MapPin size={16} className="text-cyan-300" />{p.location}</p>}
             </div>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              {
-                data.socials.map((s) => {
-                  const platform = s.platform?.toLowerCase().trim();
-
-                  const Icon = socialIcons[platform];
-
-                  return (
-                    <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm transition hover:bg-white/5">
-                      {Icon && <Icon className="h-4 w-4" />}
-
-                      {s.label || s.platform}
-                    </a>
-                  );
-                })}
+            <div className="mt-6 flex flex-wrap gap-2">
+              {data.socials.map(s => { const Icon = socialIcons[s.platform?.toLowerCase().trim()]; return <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer" className="btn-ghost inline-flex items-center gap-2 px-3! py-2! text-xs">{Icon && <Icon size={14} />} {s.platform || s.label}</a>; })}
             </div>
           </div>
-
           <ContactForm />
         </div>
       </section>
 
-      <footer className="border-t border-white/10 py-8 text-center text-sm text-slate-500">
-        <div className="container-page flex flex-row items-center justify-center gap-3">
-          <p>
-            {`© ${thisYear} ${p?.name || "Your Name"}`}
-          </p>
-
+      <footer className="border-t border-white/10 py-8">
+        <div className="container-page flex flex-wrap justify-center gap-x-10 text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} {p?.name || "Your Name"}</p>
           {
-            process.env.PORTFOLIO_GITHUB_LINK && (
-              <a href={process.env.PORTFOLIO_GITHUB_LINK} target="_blank" rel="noopener noreferrer" aria-label="GitHub"
-                className="text-slate-400 transition hover:text-white">
-                <FaGithub className="h-5 w-5" />
-              </a>
-            )
+            process.env.PORTFOLIO_GITHUB_LINK &&
+            <a href={process.env.PORTFOLIO_GITHUB_LINK} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-white">
+              <FaGithub size={17} />
+            </a>
           }
         </div>
       </footer>

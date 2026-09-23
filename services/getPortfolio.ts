@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 
 export async function getPortfolio() {
-    const [profile, education, skills, projects, publications, socials, resume, settings] = await Promise.all([
+    const [profile, education, skills, projects, publications, socials, resume, settings, experience] = await Promise.all([
         prisma.profile.findFirst(),
 
         prisma.education.findMany({
@@ -31,16 +31,21 @@ export async function getPortfolio() {
             orderBy: { sortOrder: "asc" }
         }),
 
-        prisma.resume.findFirst({
+        prisma.resume.findMany({
             where: { isActive: true },
-            orderBy: { uploadedAt: "desc" }
+            orderBy: { updatedAt: "desc" }
         }),
 
-        prisma.portfolioSetting.findMany()
+        prisma.portfolioSetting.findMany(),
+
+        prisma.experience.findMany({
+            where: { isActive: true },
+            orderBy: { startDate: "desc" }
+        })
     ]);
 
     return {
-        profile, education, skills, projects, publications, socials, resume, settings: Object.fromEntries(
+        profile, education, skills, projects, experience, publications, socials, resume, settings: Object.fromEntries(
             settings.map(s => [s.key, s.value])
         )
     };

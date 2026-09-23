@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
 import { sendNewMessageMail } from "../../../lib/mail";
+import { revalidateDashboard } from "../../../lib/revalidateDashboard";
 
 const schema = z.object({
   gmail: z
@@ -22,6 +23,8 @@ export async function POST(req: Request) {
       }, { status: 400 });
 
     const saved = await prisma.message.create({ data: parsed.data });
+
+    void revalidateDashboard();
 
     try {
       await sendNewMessageMail(saved.gmail, saved.message);
