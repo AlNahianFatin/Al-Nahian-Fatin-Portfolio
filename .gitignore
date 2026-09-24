@@ -47,3 +47,6 @@ next-env.d.ts
 # development files
 .vscode
 .vercel
+
+# portfolio logo
+/public/PortfolioLogo.svg

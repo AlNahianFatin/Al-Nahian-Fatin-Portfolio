@@ -62,19 +62,21 @@ export default async function Home() {
             {
               p?.shortBio && <p className="mt-5 max-w-2xl text-sm leading-8 text-slate-400 sm:text-base">{p.shortBio}</p>
             }
+
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="#projects" className="btn-primary inline-flex items-center gap-2">{data.settings.heroViewProjectsText ?? ""}
                 <ArrowDown size={16} />
               </a>
               {
                 data.resume?.map((r) => (
-                  <a key={r.id} href={r.fileUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost inline-flex items-center gap-2" >
+                  <a key={r.id} href={r.fileUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost inline-flex items-center gap-2 hover:animate-rotate-border" >
                     <Download size={16} />
                     {r.title || "Resume"}
                   </a>
                 ))
               }
             </div>
+            
             <div className="mt-12 flex flex-wrap gap-3 text-xs text-slate-500">
               <span className="rounded-full border border-white/8 px-3 py-1.5">{data.skills.length} skill{data.skills.length > 1 ? "s" : ""}</span>
               <span className="rounded-full border border-white/8 px-3 py-1.5">{projects.length} project{projects.length > 1 ? "s" : ""}</span>
@@ -82,16 +84,16 @@ export default async function Home() {
               <span className="rounded-full border border-white/8 px-3 py-1.5">{data.publications.length} publication{data.publications.length > 1 ? "s" : ""}</span>
             </div>
           </div>
-          <div className="glass relative mx-auto w-full max-w-sm rounded-4xl p-3">
-            <div className="absolute -inset-5 -z-10 rounded-full bg-violet-500/10 blur-3xl" />
-            {
-              p?.imageUrl ?
-                <img src={p.imageUrl} alt={p.name} className="aspect-4/5 w-full rounded-3xl object-cover" /> :
-                <div className="grid aspect-4/5 place-items-center rounded-3xl bg-linear-to-br from-violet-500/20 via-slate-900 to-cyan-400/10 text-7xl font-black text-white/10">
-                  {p?.name || "Your Name"}
-                </div>
-            }
-          </div>
+
+          {
+            p?.imageUrl &&
+            <>
+              <div className="glass relative mx-auto w-full max-w-sm rounded-4xl p-3">
+                <div className="absolute -inset-5 -z-10 rounded-4xl bg-linear-to-br from-violet-500/70 to-cyan-300/70 blur-3xl bg-conic/[from_var(--border-angle)] animate-rotate-border" />
+                <img src={p.imageUrl} alt={p.name} className="aspect-4/5 w-full rounded-3xl object-cover" />
+              </div>
+            </>
+          }
         </div>
       </section>
 

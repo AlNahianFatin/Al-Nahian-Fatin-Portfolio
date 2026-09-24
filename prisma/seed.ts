@@ -165,6 +165,16 @@ async function main() {
     update: { value: "Have a project, opportunity, or question? Send a message and I'll get back to you." },
     create: { key: "contactDescriptionText", value: "Have a project, opportunity, or question? Send a message and I'll get back to you." }
   });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "metadataTitle" },
+    update: { value: `${process.env.NEXT_PUBLIC_USER_NAME} | Full-Stack Developer` },
+    create: { key: "metadataTitle", value: `${process.env.NEXT_PUBLIC_USER_NAME} | Full-Stack Developer` }
+  });
+  await prisma.portfolioSetting.upsert({
+    where: { key: "metadataDescription" },
+    update: { value: `Personal portfolio of ${process.env.NEXT_PUBLIC_USER_NAME}.` },
+    create: { key: "metadataDescription", value: `Personal portfolio of ${process.env.NEXT_PUBLIC_USER_NAME}.` }
+  });
 
   console.log("Portfolio seed complete.");
 }

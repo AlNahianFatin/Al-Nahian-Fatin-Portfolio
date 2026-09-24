@@ -1,20 +1,181 @@
 <!DOCTYPE html>
+
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Welcome</title>
-    <style>
-      body { font-family: Arial, sans-serif; background: #f7f7f7; color: #333; }
-      .container { max-width: 500px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-      .footer { margin-top: 30px; font-size: 12px; color: #888; }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>Your portfolio has received a new message!</h2>
-      <p><b>Sender:</b> <%= gmail %></p>
-      <p><b>Message:</b> <%= message %></p>
-      <div class="footer">&copy; <%= year %> <%= user %> Portfolio. All rights reserved.</div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Portfolio Message</title>
+</head>
+
+<body
+  style="margin: 0; padding: 0; background-color: #0b1120; font-family: Arial, Helvetica, sans-serif; color: #e2e8f0;">
+
+  <div style="width: 100%; padding: 40px 16px; box-sizing: border-box; background-color: #0b1120;">
+
+    <div style="
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  ">
+
+      <!-- Header -->
+      <div style="
+      padding: 32px 36px;
+      background: linear-gradient(135deg, #172554 0%, #111827 55%, #1e1b4b 100%);
+      border-bottom: 1px solid #263244;
+    ">
+
+        <div style="
+        display: inline-block;
+        padding: 7px 12px;
+        border: 1px solid rgba(103, 232, 249, 0.25);
+        border-radius: 999px;
+        background-color: rgba(103, 232, 249, 0.08);
+        color: #67e8f9;
+        font-size: 11px;
+        font-weight: bold;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      ">
+          Portfolio Notification
+        </div>
+
+        <h1 style="
+        margin: 20px 0 8px;
+        font-size: 28px;
+        line-height: 1.25;
+        color: #ffffff;
+        font-weight: 700;
+      ">
+          <%= user %>
+        </h1>
+
+        <p style="
+        margin: 0;
+        color: #94a3b8;
+        font-size: 14px;
+        line-height: 1.6;
+      ">
+          A new message has arrived through your portfolio.
+        </p>
+
+      </div>
+
+      <!-- Content -->
+      <div style="padding: 36px;">
+
+        <h2 style="
+        margin: 0 0 24px;
+        font-size: 21px;
+        line-height: 1.4;
+        color: #f8fafc;
+      ">
+          You received a new message
+        </h2>
+
+        <!-- Sender -->
+        <div style="
+        margin-bottom: 18px;
+        padding: 18px 20px;
+        background-color: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+      ">
+          <div style="
+          margin-bottom: 7px;
+          color: #67e8f9;
+          font-size: 11px;
+          font-weight: bold;
+          letter-spacing: 1.2px;
+          text-transform: uppercase;
+        ">
+            Sender
+          </div>
+
+          <div style="
+          color: #f8fafc;
+          font-size: 15px;
+          line-height: 1.5;
+          word-break: break-word;
+        ">
+            <%= gmail %>
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div style="
+        padding: 20px;
+        background-color: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+      ">
+          <div style="
+          margin-bottom: 10px;
+          color: #c084fc;
+          font-size: 11px;
+          font-weight: bold;
+          letter-spacing: 1.2px;
+          text-transform: uppercase;
+        ">
+            Message
+          </div>
+
+          <div style="
+          color: #cbd5e1;
+          font-size: 15px;
+          line-height: 1.8;
+          white-space: pre-line;
+          word-break: break-word;
+        ">
+            <%= message %>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="margin-top: 28px; text-align: center;">
+
+          <p style="
+          margin: 0;
+          color: #64748b;
+          font-size: 12px;
+          line-height: 1.6;
+        ">
+            This notification was generated automatically from your portfolio contact form.
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div style="
+      padding: 22px 30px;
+      background-color: #0f172a;
+      border-top: 1px solid #1e293b;
+      text-align: center;
+    ">
+
+        <div style="
+        margin-bottom: 7px;
+        color: #67e8f9;
+        font-size: 13px;
+        font-weight: 600;
+      ">
+          &copy; <%= year %>
+            <%= user %> Portfolio. All rights reserved.
+        </div>
+
+      </div>
+
     </div>
-  </body>
+
+  </div>
+
+</body>
+
 </html>

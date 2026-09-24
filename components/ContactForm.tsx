@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Send, CheckCircle2 } from "lucide-react";
+import { Send, CheckCircle2, CircleX } from "lucide-react";
 import { toast } from "sonner";
 
 export function ContactForm() {
   const [gmail, setGmail] = useState("");
   const [message, setMessage] = useState("");
+  const [gmailError, setGmailError] = useState("");
+  const [messageError, setMessageError] = useState("");
   const [status, setStatus] = useState("");
+  const [isSent, setIsSent] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const [settings, setSettings] = useState<any>(null);
@@ -35,6 +38,36 @@ export function ContactForm() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!gmail || !message) {
+      if (!gmail)
+        setGmailError("Please let me know who wants to be in touch!");
+
+      if (!message)
+        setMessageError("Oops! You forgot to type your actual message!");
+
+      setIsSent(false);
+      setStatus("You missed something!");
+
+      setTimeout(() => {
+        setStatus("");
+      }, 2000);
+
+      return;
+    }
+
+    if (message && message.trim().length <= 5) {
+      setMessageError("Are you sure you have stated your purpose in just 5 letters?");
+
+      setIsSent(false);
+      setStatus("You may wanna recheck!");
+
+      setTimeout(() => {
+        setStatus("");
+      }, 2000);
+
+      return;
+    }
+
     setBusy(true);
     setStatus("");
 
@@ -47,18 +80,25 @@ export function ContactForm() {
 
       const data = await res.json();
 
-      setStatus(data.message || "Something went wrong.");
-
-      setTimeout(() => {
-        setStatus("");
-      }, 2000);
-
       if (res.ok) {
+        setIsSent(true);
+        setStatus(data.message);
         setGmail("");
         setMessage("");
+        setGmailError("");
+        setMessageError("");
+      } else {
+        setIsSent(false);
+        setStatus(data.message || "Something went wrong.");
       }
 
-    } catch {
+      setTimeout(() => {
+        setIsSent(false);
+        setStatus("");
+      }, 2000);
+    }
+    catch {
+      setIsSent(false);
       setStatus("Unable to send your message right now.");
     }
     finally {
@@ -74,14 +114,22 @@ export function ContactForm() {
       </div>
 
       <label className="block text-xs font-medium text-slate-300">Your email</label>
-      <input required type="email" value={gmail} onChange={e => setGmail(e.target.value)}
+      <input type="email" value={gmail} onChange={e => {
+        setGmail(e.target.value);
+        setGmailError("");
+      }}
         className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-violet-400/60"
         placeholder="you@example.com" />
+      <p className="text-red-400">{gmailError}</p>
 
       <label className="mt-5 block text-xs font-medium text-slate-300">Message</label>
-      <textarea required minLength={5} value={message} onChange={e => setMessage(e.target.value)}
+      <textarea value={message} onChange={e => {
+        setMessage(e.target.value);
+        setMessageError("");
+      }}
         className="mt-2 min-h-40 w-full resize-y rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-violet-400/60"
         placeholder="Tell me what you're thinking..." />
+      <p className="text-red-400">{messageError}</p>
 
       <button disabled={busy} className="btn-primary mt-5 inline-flex w-full items-center justify-center gap-2 disabled:opacity-50">
         {busy ? "Sending..." : <>Send message <Send size={15} /></>}
@@ -89,7 +137,11 @@ export function ContactForm() {
 
       {
         status &&
-        <p className="mt-4 flex items-start gap-2 text-xs text-slate-300"><CheckCircle2 size={15} className="mt-0.5 text-cyan-300" />{status}</p>
+        <p className="mt-4 flex items-start gap-2 text-xs text-slate-300">
+          {
+            isSent ? <CheckCircle2 size={15} className="mt-0.5 text-cyan-300" /> : <CircleX className="text-red-500" size={15} />
+          }{status}
+        </p>
       }
     </form>
   );
