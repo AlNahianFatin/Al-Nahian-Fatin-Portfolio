@@ -24,8 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const fallbackName = process.env.USER_NAME || "User name";
 
   return {
-    title: data.settings.metadataTitle || `${fallbackName} | Full-Stack Developer`,
-    description: data.settings.metadataDescription || `Personal portfolio of ${fallbackName}.`,
+    title: data.settings.portfolioMetadataTitle || `${fallbackName} | Full-Stack Developer`,
+    description: data.settings.portfolioMetadataDescription || `Personal portfolio of ${fallbackName}.`,
     icons: {
       icon: "/PortfolioLogo.svg",
     },
