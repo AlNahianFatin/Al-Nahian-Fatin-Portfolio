@@ -85,7 +85,7 @@ Follow these steps to get a development environment up and running on your local
     cd Al-Nahian-Fatin-Portfolio
     ```
 
-2.  **Paste your portfolio svg logo in './public' folder and rename it to 'PortfolioLogo.svg'**
+2.  **Paste your portfolio svg logo in `./public` folder and rename it to `PortfolioLogo.svg`**
 
 3.  **Install dependencies**
     ```bash
