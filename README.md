@@ -63,6 +63,7 @@ This repository hosts a meticulously crafted personal portfolio website designed
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
 **DevOps:**
+
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 ## 🚀 Quick Start
