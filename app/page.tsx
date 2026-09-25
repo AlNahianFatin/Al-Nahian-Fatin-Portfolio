@@ -57,7 +57,7 @@ export default async function Home() {
               <span className="blink-cursor" />
             </h1>
             <p className="mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
-              {p?.title || "Full-Stack Developer"}
+              {p?.title || "Software Engineer"}
             </p>
             {
               p?.shortBio && <p className="mt-5 max-w-2xl text-sm leading-8 text-slate-400 sm:text-base">{p.shortBio}</p>
@@ -138,7 +138,7 @@ export default async function Home() {
                         </div>
                         {
                           e.gpa &&
-                          <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-300">GPA {String(e.gpa)}</span>
+                          <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-300 w-fit max-w-20 whitespace-nowrap">GPA {String(e.gpa)}</span>
                         }
                       </div>
                       {
