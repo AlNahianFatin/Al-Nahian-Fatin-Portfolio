@@ -10,7 +10,7 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/AlNahianFatin/Al-Nahian-Fatin-Portfolio?style=for-the-badge)](https://github.com/AlNahianFatin/Al-Nahian-Fatin-Portfolio/issues)
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
+<!-- [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE) -->
 
 **A modern, dynamic, interactive, and database-driven Next.js portfolio showcasing my projects, skills, and professional journey. Portfolio content is managed from a separate dashboard project.**
 
@@ -27,7 +27,7 @@ This repository hosts a meticulously crafted personal portfolio website designed
 -   **Interactive Project Showcase**: Dynamic display of personal and professional projects with detailed descriptions.
 -   **Comprehensive Skills Section**: Categorized overview of technical skills and expertise.
 -   **Dynamic Content Management**: Backend-driven content for projects, experiences, and skills using Prisma ORM.
--   **Contact Form**: Integrated email service (Resend) for direct communication from visitors.
+-   **Contact Form**: Integrated email service using Nodemailer for direct communication from visitors.
 -   **MDX Support**: For rich, markdown-enhanced content creation (e.g., blog posts, detailed project write-ups).
 -   **Smooth Animations & Transitions**: Powered by TailwindCSS for a polished and engaging UI.
 -   **Responsive Design**: Optimized for a flawless experience across all devices and screen sizes.
@@ -40,29 +40,25 @@ This repository hosts a meticulously crafted personal portfolio website designed
 
 ## 🛠️ Tech Stack
 
-**Frontend:**
+### **Frontend:**
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
-
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+### **Backend:**
 
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-
-**Backend:**
-
-![Next.js API Routes](https://img.shields.io/badge/Next.js%20API-000000?style=for-the-badge&logo=next.js&logoColor=white)
-
+![Next.js API Routes](https://img.shields.io/badge/Next.js_API-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![Nodemailer](https://img.shields.io/badge/Nodemailer-0F9D58?style=for-the-badge&logo=nodemailer&logoColor=white)
 
-![Nodemailer](https://img.shields.io/badge/Nodemailer-000000?style=for-the-badge&logo=nodemailer&logoColor=white)
+### **Database:**
 
-**Database:**
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+### **DevOps:**
 
-**DevOps:**
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 ## 🚀 Quick Start
@@ -122,14 +118,20 @@ Follow these steps to get a development environment up and running on your local
     | `USER_PROJECT2_GITHUB_URL` | User project 2 GitHub repository link. | `https://github.com/user/project1` | Yes |
     | `USER_PROJECT2_LIVE_URL` | User project 2 live link. | `https://project2.com` |  Yes   | 
     | `PORTFOLIO_GITHUB_LINK` | API key for the Resend email service. | `https://github.com/user/portfolio` | Yes |
-    | `REVALIDATE_SECRET` | Revalidate secret to sync with dashboard. | `vtrkl34k6k/'43k3knmiMH` | Yes |
+    | `REVALIDATE_SECRET` | Revalidate secret to sync with dashboard. | `vtrkl34k6k/'43k3knmiMH` (same as in dashboard) | Yes |
 
 5.  **Database setup**
-    Initialize your database schema and apply migrations using Prisma:
+    Apply Prisma migrations and generate the client:
     ```bash
     npm run db:generate
     npm run db:migrate --name init
+    ```
+    *If you prefer to push your schema directly without migrations (e.g., for quick local setup on a new database):*
+    ```bash
     npm run db:push
+    ```
+    *Seed initial data to be able to login:*
+    ```bash
     npm run db:seed
     ```
 
@@ -158,7 +160,7 @@ Al-Nahian-Fatin-Portfolio/
 ├── prisma/               # Prisma schema definitions and migration files
 │   └── schema.prisma     # Database schema definition
 ├── services/             # Logic for interacting with external services or business logic
-├── templates/            # Email templates (e.g., for Resend)
+├── templates/            # EJS email templates for Nodemailer
 ├── next.config.ts        # Next.js configuration
 ├── package.json          # Project dependencies and scripts
 ├── postcss.config.mjs    # PostCSS configuration, primarily for Tailwind CSS
@@ -220,7 +222,7 @@ This command compiles the Next.js application into static assets and server-side
 
 ### Deployment Options
 This Next.js application is highly suitable for deployment on serverless platforms:
--   **Vercel (Recommended)**: As a Next.js application, it integrates seamlessly with Vercel for continuous deployment, automatic scaling, and global CDN. Connect your GitHub repository to Vercel, and it will automatically deploy on every push to `main`.
+-   **Vercel (Recommended)**: As a Next.js application, it integrates seamlessly with Vercel for continuous deployment, automatic scaling, and global CDN.
 -   **Netlify**: Similar to Vercel, Netlify offers excellent support for Next.js applications, including automatic builds and deployments.
 -   **Docker**: While not explicitly configured with a Dockerfile, you could containerize the application for deployment on platforms like AWS ECS, Kubernetes, or other container orchestration services.
 
@@ -230,14 +232,21 @@ This application uses Next.js API Routes for its backend functionalities.
 
 ## 🤝 Contributing
 
-We welcome contributions! If you have suggestions for improvements or bug fixes, please open an issue or submit a pull request.
+We welcome contributions to improve this project! Please follow these guidelines:
+
+1.  **Fork the repository**.
+2.  **Create a new branch** for your feature or bug fix: `git checkout -b feature/your-feature-name`.
+3.  **Make your changes**, adhering to the existing code style.
+4.  **Write clear, concise commit messages**.
+5.  **Push your branch** to your forked repository.
+6.  **Open a Pull Request** to the `main` branch of this repository, describing your changes in detail.
 
 ### Development Setup for Contributors
 Ensure you follow the [Quick Start](#quick-start) guide to set up your local development environment. When submitting changes, please ensure your code adheres to the project's coding standards and passes lint checks.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is currently without an explicit license file. 
 
 ## 🙏 Acknowledgments
 
@@ -246,8 +255,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 -   **Prisma**: For an excellent ORM experience.
 -   **Nodemailer**: For sending notification via email upon receiving message.
 -   **ejs**: For generating beautiful email formatting.
--   **Lucide React & React Icons**: For elegant icons.
+-   **Lucide React & React Icons**: For beautiful and easily customizable open-source icons.
 -   **Zod**: For validating viewer message form.
+
+## 📞 Support & Contact
+
+-   🐛 Issues: If you find any bugs or have suggestions, please open an issue on [GitHub Issues](https://github.com/AlNahianFatin/Al-Nahian-Fatin-Portfolio-Dashboard/issues).
+[Email](mailto:fatinnahian@gmail.com)
 
 ---
 
