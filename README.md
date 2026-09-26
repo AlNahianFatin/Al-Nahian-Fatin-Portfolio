@@ -60,7 +60,6 @@ This repository hosts a meticulously crafted personal portfolio website designed
 
 ### **DevOps:**
 
-**DevOps:**
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 ## 🚀 Quick Start
@@ -132,7 +131,7 @@ Follow these steps to get a development environment up and running on your local
     ```bash
     npm run db:push
     ```
-    *Seed initial data to be able to login:*
+    Seed initial data to be able to login:
     ```bash
     npm run db:seed
     ```
@@ -263,6 +262,7 @@ This project is currently without an explicit license file.
 ## 📞 Support & Contact
 
 -   🐛 Issues: If you find any bugs or have suggestions, please open an issue on [GitHub Issues](https://github.com/AlNahianFatin/Al-Nahian-Fatin-Portfolio-Dashboard/issues).
+
 [Email](mailto:fatinnahian@gmail.com)
 
 ---
