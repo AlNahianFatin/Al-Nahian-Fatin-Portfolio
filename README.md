@@ -15,6 +15,7 @@
 **A modern, dynamic, interactive, and database-driven Next.js portfolio showcasing my projects, skills, and professional journey. Portfolio content is managed from a separate dashboard project.**
 
 [Live Demo](https://al-nahian-fatin-portfolio.vercel.app) 
+
 [Dashboard Repository](https://github.com/AlNahianFatin/Al-Nahian-Fatin-Portfolio-Dashboard) 
 </div>
 
@@ -59,6 +60,7 @@ This repository hosts a meticulously crafted personal portfolio website designed
 
 ### **DevOps:**
 
+**DevOps:**
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 ## 🚀 Quick Start
@@ -79,7 +81,7 @@ Follow these steps to get a development environment up and running on your local
     cd Al-Nahian-Fatin-Portfolio
     ```
 
-2.  **Paste your portfolio svg logo in './public' folder and rename it to 'PortfolioLogo.svg'**
+2.  **Paste your portfolio svg logo in `./public` folder and rename it to `PortfolioLogo.svg`**
 
 3.  **Install dependencies**
     ```bash
