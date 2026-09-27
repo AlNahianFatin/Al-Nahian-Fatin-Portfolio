@@ -68,6 +68,19 @@ export function ContactForm() {
       return;
     }
 
+    if (message && message.trim().length >= 5000) {
+      setMessageError("Are you sure you have 5000 characters to say? Please be concise!");
+
+      setIsSent(false);
+      setStatus("You may wanna recheck!");
+
+      setTimeout(() => {
+        setStatus("");
+      }, 2000);
+
+      return;
+    }
+
     setBusy(true);
     setStatus("");
 

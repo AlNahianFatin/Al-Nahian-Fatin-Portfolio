@@ -1,25 +1,16 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
 import { sendNewMessageMail } from "../../../lib/mail";
 import { revalidateDashboard } from "../../../lib/revalidateDashboard";
-
-const schema = z.object({
-  gmail: z
-    .string("Please provide your Gmail")
-    .email("Please enter a valid Gmail"),
-  message: z
-    .string("Please enter your message")
-    .min(5, "Message must be at least 5 characters long")
-    .max(5000, "Message must be within 5000 characters")
-});
+import { schema } from "../../../services/messageValidation";
 
 export async function POST(req: Request) {
   try {
     const parsed = schema.safeParse(await req.json());
+
     if (!parsed.success)
       return NextResponse.json({
-        message: "Please provide a valid Gmail and message."
+        message: "Please provide a valid email and message."
       }, { status: 400 });
 
     const saved = await prisma.message.create({ data: parsed.data });
